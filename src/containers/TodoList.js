@@ -2,31 +2,25 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import AddTodoForm from '../containers/AddTodoForm';
 import TodoItem from '../components/TodoItem';
+import WindowHeader from '../containers/WindowHeader';
+import { FaTrash as TrashIcon } from 'react-icons/fa';
 
 const StyledWrapper = styled.div`
+  position: absolute;
   width: 350px;
-  min-height: 400px;
-  margin: 20px;
   border-radius: 5px;
   background-color: #add8e6;
   box-shadow: 0 6px 7px -2px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-`;
-
-const StyledHeader = styled.div`
-  height: 30px;
-  border-radius: 5px 5px 0 0;
-  font-size: 15px;
-  background-color: rgba(0, 0, 0, 0.6);
-
-  h2 {
-    color: #eee;
-    text-align: center;
-    font-size: 15px;
-    line-height: 30px;
-  }
+  opacity: ${props => (props.isWindowActive ? 1 : 0.7)};
+  z-index: ${props => (props.isWindowActive ? 2 : 1)};
+  cursor: ${props => (props.isWindowActive ? 'default' : 'pointer')};
+  max-height: ${props => (props.isMinimized ? '35px' : '100vh')};
+  transition: opacity 0.2s,
+    max-height ${props => (props.isMinimized ? '0.3s' : '1s')};
+  transform: translate(50px, 50px);
 `;
 
 const StyledItems = styled.div`
@@ -34,13 +28,50 @@ const StyledItems = styled.div`
 `;
 
 const StyledParagraph = styled.p`
-  margin: 40px 0;
+  margin: 22px 0 15px;
   text-align: center;
   opacity: 0.1;
-  font-size: 36px;
+  font-size: 24px;
 `;
 
-const TodoList = ({ name }) => {
+const StyledMenu = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 0 0 10px 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  transform: ${props => (props.isMenuToggled ? 'scaleY(1)' : 'scaleY(0)')};
+  transform-origin: top;
+  z-index: 2;
+  transition: transform 0.2s;
+  padding: 45px 15px 10px 10px;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.3);
+
+  div {
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    :hover {
+      color: #fff;
+    }
+  }
+
+  svg {
+    margin-right: 6px;
+    vertical-align: -1px;
+  }
+`;
+
+const TodoList = ({
+  name,
+  id,
+  isWindowActive,
+  active,
+  confirmRemovingList
+}) => {
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -55,6 +86,11 @@ const TodoList = ({ name }) => {
       isDone: true
     }
   ]);
+
+  const [minimized, setMinimized] = useState(false);
+  const [menuToggled, setMenuToggled] = useState(false);
+
+  const windowRef = useState(React.createRef())[0];
 
   const handleAddTodoItem = content => {
     const newId =
@@ -88,11 +124,39 @@ const TodoList = ({ name }) => {
     setTodos(newTodos);
   };
 
+  const handleChangeViewState = () => {
+    if (menuToggled) setMenuToggled(!menuToggled);
+
+    setMinimized(!minimized);
+  };
+
+  const handleToggleMenu = () => {
+    if (minimized) setMinimized(!minimized);
+
+    setMenuToggled(!menuToggled);
+  };
+
   return (
-    <StyledWrapper>
-      <StyledHeader>
-        <h2>{name}</h2>
-      </StyledHeader>
+    <StyledWrapper
+      ref={windowRef}
+      onMouseDown={active}
+      isWindowActive={isWindowActive}
+      isMinimized={minimized}
+    >
+      <WindowHeader
+        windowRef={windowRef}
+        changeViewState={handleChangeViewState}
+        isMinimized={minimized}
+        toggleMenu={handleToggleMenu}
+      >
+        {name}
+      </WindowHeader>
+      <StyledMenu isMenuToggled={menuToggled}>
+        <div onClick={confirmRemovingList.bind(this, id, name)}>
+          <TrashIcon />
+          Remove
+        </div>
+      </StyledMenu>
       <StyledItems>
         {todos.length > 0 ? (
           todos.map((todo, index) => (
