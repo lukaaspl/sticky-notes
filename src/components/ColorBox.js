@@ -1,21 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import setColor from '../helpers/setColor';
+
 const StyledBox = styled.div`
   position: relative;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  /* background-color: ${props => props.color}; */
+  background-image: ${({ color }) => setColor(color).gradientIcon};
   margin: 0 7px;
   cursor: pointer;
-  border: 2px solid;
-  border-color: ${props =>
-    props.picked ? 'rgba(0, 0, 0, .7)' : 'transparent'};
-  transition: border-color 0.2s;
+  /* box-shadow: 0 0 0 2px transparent; */
+  box-shadow: ${({ picked }) =>
+    picked ? '0 0 0 2px rgba(0, 0, 0, .7)' : '0 0 0 2px transparent'};
+  transition: box-shadow 0.2s;
 
   :hover {
-    ${props => (props.picked ? '' : 'border-color: rgba(0, 0, 0, .3)')};
+    ${props => (props.picked ? '' : 'box-shadow: 0 0 0 2px rgba(0, 0, 0, .5)')};
   }
 
   ::before {
@@ -37,6 +40,7 @@ const StyledBox = styled.div`
     opacity: ${props => (props.picked ? 1 : 0)};
     transform: ${props =>
       props.picked ? 'translate(-50%, 0)' : 'translate(-50%, 10px)'};
+    pointer-events: none;
   }
 
   ::after {
@@ -58,27 +62,11 @@ const StyledBox = styled.div`
 `;
 
 const ColorBox = ({ id, name, picked, pickColor }) => {
-  let boxColor;
-
-  switch (name) {
-    case 'Sky Blue':
-      boxColor = 'skyblue';
-      break;
-    case 'Desert Hell':
-      boxColor = 'orange';
-      break;
-    case 'Lilac Purple':
-      boxColor = 'purple';
-      break;
-    default:
-      boxColor = 'skyblue';
-  }
-
   return (
     <>
       <StyledBox
         colorLabel={name}
-        color={boxColor}
+        color={name}
         picked={picked}
         onClick={pickColor.bind(this, id, name)}
       />

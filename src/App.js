@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
 
 import TodoList from './containers/TodoList';
 import AddListForm from './containers/AddListForm';
@@ -15,10 +15,12 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: Poppins, sans-serif;
     background: #77A1D3; 
-    background: -webkit-linear-gradient(to right, #E684AE, #79CBCA, #77A1D3);
-    background: linear-gradient(to right, #E684AE, #79CBCA, #77A1D3);
+    background-image: -webkit-linear-gradient(to right, #E684AE, #79CBCA, #77A1D3);
+    background-image: linear-gradient(to right, #E684AE, #79CBCA, #77A1D3);
+    background-size: 120%;
     height: 100vh;
     overflow: hidden;
+    animation: ${moveBackground} 30s ease-in infinite;
   }
 `;
 
@@ -27,7 +29,7 @@ const App = () => {
     {
       id: 1,
       name: 'Primary todo list',
-      color: 'Sky Blue',
+      color: 'Lilac Purple',
       isActive: true
     },
     {
@@ -99,6 +101,7 @@ const App = () => {
           key={todoList.id}
           id={todoList.id}
           name={todoList.name}
+          color={todoList.color}
           isWindowActive={todoList.isActive}
           active={handleSetWindowActive.bind(this, todoList.id)}
           confirmRemovingList={handleConfirmRemovingList}

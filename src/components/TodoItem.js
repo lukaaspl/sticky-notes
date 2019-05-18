@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { FaCheckCircle, FaTimesCircle, FaTrash } from 'react-icons/fa';
 
+import setColor from '../helpers/setColor';
+
 const StyledWrapper = styled.div`
   position: relative;
   display: flex;
@@ -11,7 +13,7 @@ const StyledWrapper = styled.div`
   z-index: 1;
 
   &:hover {
-    background-color: #a5d3e2;
+    background-color: ${({ color }) => setColor(color).listBackgroundHover};
 
     & .item-navbar > svg {
       pointer-events: all;
@@ -20,10 +22,11 @@ const StyledWrapper = styled.div`
   }
 
   &:nth-child(even) {
-    background-color: #9acfe0;
+    background-color: ${({ color }) => setColor(color).evenItemBackground};
 
     &:hover {
-      background-color: #90c9db;
+      background-color: ${({ color }) =>
+        setColor(color).evenItemBackgroundHover};
     }
   }
 
@@ -34,7 +37,9 @@ const StyledWrapper = styled.div`
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(121, 203, 202, 0.7);
+    /* background-color: rgba(121, 203, 202, 0.3); */
+    /* background-color: rgba(122, 226, 153, 0.4); */
+    background-color: rgba(144, 237, 172, 0.5);
     z-index: -1;
     transition: 0.5s;
     opacity: ${props => (props.isDone ? 1 : 0)};
@@ -95,9 +100,9 @@ const StyledNavBar = styled.div`
   }
 `;
 
-const TodoItem = ({ todo, index, changeItemState, removeItem }) => {
+const TodoItem = ({ todo, index, color, changeItemState, removeItem }) => {
   return (
-    <StyledWrapper isDone={todo.isDone}>
+    <StyledWrapper isDone={todo.isDone} color={color}>
       <div>
         <StyledDate isDone={todo.isDone}>
           {<StyledDoneIcon isDone={todo.isDone} />}

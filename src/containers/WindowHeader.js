@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { FaWindowMaximize, FaGripVertical } from 'react-icons/fa';
 
+import setColor from '../helpers/setColor';
+
 const StyledWrapper = styled.div`
   position: relative;
   height: 35px;
@@ -25,7 +27,7 @@ const StyledWrapper = styled.div`
     top: 50%;
 
     :hover {
-      color: #add8e6;
+      color: ${({ color }) => setColor(color).navIconsHover};
     }
   }
 `;
@@ -54,6 +56,7 @@ class WindowHeader extends Component {
     };
 
     this.windowRef = this.props.windowRef;
+    this.color = this.props.color;
   }
 
   handleWindowGrab = e => {
@@ -90,6 +93,7 @@ class WindowHeader extends Component {
       <StyledWrapper
         onMouseDown={this.handleWindowGrab}
         onMouseUp={this.handleWindowRelase}
+        color={this.color}
       >
         <h2>{windowName}</h2>
         <ToggleMenuButton onClick={this.props.toggleMenu} />

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
+import { FaTrash as TrashIcon } from 'react-icons/fa';
 import styled from 'styled-components';
+
 import AddTodoForm from '../containers/AddTodoForm';
 import TodoItem from '../components/TodoItem';
 import WindowHeader from '../containers/WindowHeader';
-import { FaTrash as TrashIcon } from 'react-icons/fa';
+import setColor from '../helpers/setColor';
 
 const StyledWrapper = styled.div`
   position: absolute;
   width: 350px;
   border-radius: 5px;
-  background-color: #add8e6;
+  background-color: ${({ listBackground }) => listBackground};
   box-shadow: 0 6px 7px -2px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -20,7 +22,7 @@ const StyledWrapper = styled.div`
   max-height: ${props => (props.isMinimized ? '35px' : '100vh')};
   transition: opacity 0.2s,
     max-height ${props => (props.isMinimized ? '0.3s' : '1s')};
-  transform: translate(50px, 50px);
+  transform: translate(100%, 100%);
 `;
 
 const StyledItems = styled.div`
@@ -68,6 +70,7 @@ const StyledMenu = styled.div`
 const TodoList = ({
   name,
   id,
+  color,
   isWindowActive,
   active,
   confirmRemovingList
@@ -82,6 +85,18 @@ const TodoList = ({
     {
       id: 2,
       content: 'And this is my second todo item, hooks are great!',
+      date: 'Today, 20:34',
+      isDone: false
+    },
+    {
+      id: 3,
+      content: 'Woooow! Nice app',
+      date: 'Today, 20:34',
+      isDone: true
+    },
+    {
+      id: 4,
+      content: "You must be great developer, aren't you?",
       date: 'Today, 20:34',
       isDone: true
     }
@@ -142,12 +157,14 @@ const TodoList = ({
       onMouseDown={active}
       isWindowActive={isWindowActive}
       isMinimized={minimized}
+      listBackground={setColor(color).listBackground}
     >
       <WindowHeader
         windowRef={windowRef}
         changeViewState={handleChangeViewState}
         isMinimized={minimized}
         toggleMenu={handleToggleMenu}
+        color={color}
       >
         {name}
       </WindowHeader>
@@ -163,6 +180,7 @@ const TodoList = ({
             <TodoItem
               key={todo.id}
               todo={todo}
+              color={color}
               index={index}
               changeItemState={handleChangeItemState}
               removeItem={handleRemoveItem}
