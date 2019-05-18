@@ -7,6 +7,11 @@ import TodoItem from '../components/TodoItem';
 import WindowHeader from '../containers/WindowHeader';
 import setColor from '../helpers/setColor';
 
+const screenCenter = {
+  width: Math.floor(window.innerWidth / 2) + 'px',
+  height: Math.floor(window.innerHeight / 2) + 'px'
+};
+
 const StyledWrapper = styled.div`
   position: absolute;
   width: 350px;
@@ -22,7 +27,10 @@ const StyledWrapper = styled.div`
   max-height: ${props => (props.isMinimized ? '35px' : '100vh')};
   transition: opacity 0.2s,
     max-height ${props => (props.isMinimized ? '0.3s' : '1s')};
-  transform: translate(100%, 100%);
+  transform: translate(
+    calc(${screenCenter.width} - 50%),
+    calc(${screenCenter.height} - 50%)
+  );
 `;
 
 const StyledItems = styled.div`
