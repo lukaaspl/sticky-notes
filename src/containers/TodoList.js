@@ -80,35 +80,36 @@ const TodoList = ({
   id,
   color,
   placeholder,
+  actionMessage,
   isWindowActive,
   active,
   confirmRemovingList
 }) => {
   const [todos, setTodos] = useState([
-    {
-      id: 1,
-      content: 'This is my first todo item',
-      date: 'Today, 20:31',
-      isDone: false
-    },
-    {
-      id: 2,
-      content: 'And this is my second todo item, hooks are great!',
-      date: 'Today, 20:34',
-      isDone: false
-    },
-    {
-      id: 3,
-      content: 'Woooow! Nice app',
-      date: 'Today, 20:34',
-      isDone: true
-    },
-    {
-      id: 4,
-      content: "You must be great developer, aren't you?",
-      date: 'Today, 20:34',
-      isDone: true
-    }
+    // {
+    //   id: 1,
+    //   content: 'This is my first todo item',
+    //   date: 'Today, 20:31',
+    //   isDone: false
+    // },
+    // {
+    //   id: 2,
+    //   content: 'And this is my second todo item, hooks are great!',
+    //   date: 'Today, 20:34',
+    //   isDone: false
+    // },
+    // {
+    //   id: 3,
+    //   content: 'Woooow! Nice app',
+    //   date: 'Today, 20:34',
+    //   isDone: true
+    // },
+    // {
+    //   id: 4,
+    //   content: "You must be great developer, aren't you?",
+    //   date: 'Today, 20:34',
+    //   isDone: true
+    // }
   ]);
 
   const [minimized, setMinimized] = useState(false);
@@ -196,7 +197,7 @@ const TodoList = ({
             />
           ))
         ) : (
-          <StyledParagraph>Plan sth crazy!</StyledParagraph>
+          <StyledParagraph>{actionMessage}</StyledParagraph>
         )}
       </StyledItems>
       <AddTodoForm addItem={handleAddTodoItem} placeholder={placeholder} />
