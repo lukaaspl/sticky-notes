@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { createGlobalStyle, keyframes } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
 import TodoList from './containers/TodoList';
 import AddListForm from './containers/AddListForm';
 import Prompt from './components/Prompt';
+import backgroundAnimation from './helpers/backgroundAnimation';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -20,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
     background-size: 120%;
     height: 100vh;
     overflow: hidden;
-    animation: ${moveBackground} 30s ease-in infinite;
+    animation: ${backgroundAnimation} 30s ease-in infinite;
   }
 `;
 
