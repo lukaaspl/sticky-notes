@@ -79,6 +79,7 @@ const TodoList = ({
   name,
   id,
   color,
+  placeholder,
   isWindowActive,
   active,
   confirmRemovingList
@@ -198,7 +199,7 @@ const TodoList = ({
           <StyledParagraph>Plan sth crazy!</StyledParagraph>
         )}
       </StyledItems>
-      <AddTodoForm addItem={handleAddTodoItem} />
+      <AddTodoForm addItem={handleAddTodoItem} placeholder={placeholder} />
     </StyledWrapper>
   );
 };

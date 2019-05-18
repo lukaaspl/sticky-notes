@@ -5,6 +5,7 @@ import TodoList from './containers/TodoList';
 import AddListForm from './containers/AddListForm';
 import Prompt from './components/Prompt';
 import backgroundAnimation from './helpers/backgroundAnimation';
+import randomPlaceholder from './helpers/randomPlaceholder';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -31,12 +32,14 @@ const App = () => {
       id: 1,
       name: 'Primary todo list',
       color: 'Lilac Purple',
+      placeholder: 'take dog for a walk',
       isActive: true
     },
     {
       id: 2,
       name: 'Additional list',
       color: 'Sky Blue',
+      placeholder: 'check browsers compatibility',
       isActive: false
     }
   ]);
@@ -83,7 +86,12 @@ const App = () => {
         ? parseInt(todoLists[todoLists.length - 1].id + 1)
         : 1;
 
-    const newTodoLists = [...todoLists, { id, name, color, isActive: false }];
+    const placeholder = randomPlaceholder(todoLists);
+
+    const newTodoLists = [
+      ...todoLists,
+      { id, name, color, placeholder, isActive: false }
+    ];
 
     setTodoLists(newTodoLists);
   };
@@ -103,6 +111,7 @@ const App = () => {
           id={todoList.id}
           name={todoList.name}
           color={todoList.color}
+          placeholder={todoList.placeholder}
           isWindowActive={todoList.isActive}
           active={handleSetWindowActive.bind(this, todoList.id)}
           confirmRemovingList={handleConfirmRemovingList}

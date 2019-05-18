@@ -58,6 +58,8 @@ class AddTodoForm extends Component {
       value: '',
       error: false
     };
+
+    this.placeholder = this.props.placeholder;
   }
 
   componentWillUnmount() {
@@ -90,7 +92,7 @@ class AddTodoForm extends Component {
           onChange={e => this.setState({ value: e.target.value })}
           error={this.state.error}
           type="text"
-          placeholder="e.g. check browsers compatibility"
+          placeholder={`e.g. ${this.placeholder}`}
         />
       </StyledForm>
     );
