@@ -6,13 +6,17 @@ import AddTodoForm from '../containers/AddTodoForm';
 import TodoItem from '../components/TodoItem';
 import WindowHeader from '../containers/WindowHeader';
 import setColor from '../helpers/setColor';
-import storage from '../helpers/storage';
+
+const screenCenter = {
+  width: Math.floor(window.innerWidth / 2) + 'px',
+  height: Math.floor(window.innerHeight / 2) + 'px'
+};
 
 const StyledWrapper = styled.div`
   position: absolute;
   width: 350px;
   border-radius: 5px;
-  background-color: ${({ color }) => setColor(color).listBackground};
+  background-color: ${({ listBackground }) => listBackground};
   box-shadow: 0 6px 7px -2px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
@@ -23,7 +27,10 @@ const StyledWrapper = styled.div`
   max-height: ${props => (props.isMinimized ? '35px' : '100vh')};
   transition: opacity 0.2s,
     max-height ${props => (props.isMinimized ? '0.3s' : '1s')};
-  ${({ position }) => position};
+  transform: translate(
+    calc(${screenCenter.width} - 50%),
+    calc(${screenCenter.height} - 50%)
+  );
 `;
 
 const StyledItems = styled.div`
@@ -78,14 +85,37 @@ const TodoList = ({
   active,
   confirmRemovingList
 }) => {
-  const [todos, setTodos] = useState(
-    storage.getItemsFromStorage(id) ? storage.getItemsFromStorage(id) : []
-  );
+  const [todos, setTodos] = useState([
+    {
+      id: 1,
+      content: 'This is my first todo item',
+      date: 'Today, 20:31',
+      isDone: false
+    },
+    {
+      id: 2,
+      content: 'And this is my second todo item, hooks are great!',
+      date: 'Today, 20:34',
+      isDone: false
+    },
+    {
+      id: 3,
+      content: 'Woooow! Nice app',
+      date: 'Today, 20:34',
+      isDone: true
+    },
+    {
+      id: 4,
+      content: "You must be great developer, aren't you?",
+      date: 'Today, 20:34',
+      isDone: true
+    }
+  ]);
+
   const [minimized, setMinimized] = useState(false);
   const [menuToggled, setMenuToggled] = useState(false);
-  const [transform, setPosition] = useState(
-    storage.getListPosition(id) ? storage.getListPosition(id) : false
-  );
+  const [transform, setTransform] = useState({ x: 10, y: 10 });
+
   const windowRef = useState(React.createRef())[0];
 
   const handleAddTodoItem = content => {
@@ -102,7 +132,6 @@ const TodoList = ({
     ];
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
   };
 
   const handleChangeItemState = index => {
@@ -111,7 +140,6 @@ const TodoList = ({
     newTodos[index].isDone = !newTodos[index].isDone;
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
   };
 
   const handleRemoveItem = index => {
@@ -120,7 +148,6 @@ const TodoList = ({
     newTodos.splice(index, 1);
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
   };
 
   const handleChangeViewState = () => {
@@ -135,35 +162,13 @@ const TodoList = ({
     setMenuToggled(!menuToggled);
   };
 
-  const handleSetTransform = ({ x, y }) => {
-    setPosition({ x, y });
-
-    if (x && y) storage.saveListPosition(id, { x, y });
-  };
-
-  const getWindowPosition = () => {
-    if (transform)
-      return `transform: translate(${transform.x}px, ${transform.y}px)`;
-
-    const screenCenter = {
-      x: Math.floor(window.innerWidth / 2),
-      y: Math.floor(window.innerHeight / 2)
-    };
-
-    return `transform: translate(
-      calc(${screenCenter.x}px - 50%), 
-      calc(${screenCenter.y}px - 50%)
-    )`;
-  };
-
   return (
     <StyledWrapper
       ref={windowRef}
       onMouseDown={active}
       isWindowActive={isWindowActive}
       isMinimized={minimized}
-      color={color}
-      position={getWindowPosition()}
+      listBackground={setColor(color).listBackground}
     >
       <WindowHeader
         windowRef={windowRef}
@@ -171,8 +176,7 @@ const TodoList = ({
         isMinimized={minimized}
         toggleMenu={handleToggleMenu}
         color={color}
-        transform={transform}
-        setTransform={handleSetTransform}
+        transform={setTransform}
       >
         {name}
       </WindowHeader>

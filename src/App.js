@@ -7,6 +7,7 @@ import Prompt from './components/Prompt';
 import backgroundAnimation from './helpers/backgroundAnimation';
 import randomPlaceholder from './helpers/randomPlaceholder';
 import randomActionMessage from './helpers/randomActionMessage';
+import storage from './helpers/storage';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -28,24 +29,15 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => {
-  const [todoLists, setTodoLists] = useState([
-    {
-      id: 1,
-      name: 'Primary todo list',
-      color: 'Lilac Purple',
-      placeholder: 'take dog for a walk',
-      actionMessage: 'test1',
-      isActive: true
-    },
-    {
-      id: 2,
-      name: 'Additional list',
-      color: 'Sky Blue',
-      placeholder: 'check browsers compatibility',
-      actionMessage: 'test2',
-      isActive: false
-    }
-  ]);
+  //     id: 1,
+  //     name: 'Primary todo list',
+  //     color: 'Lilac Purple',
+  //     placeholder: 'take dog for a walk',
+  //     actionMessage: 'test1',
+  //     isActive: true
+  const [todoLists, setTodoLists] = useState(
+    storage.getListsFromStorage() ? storage.getListsFromStorage() : []
+  );
 
   const [prompt, setPrompt] = useState(false);
   const [listToRemove, setListToRemove] = useState(null);
@@ -74,6 +66,10 @@ const App = () => {
     setTodoLists(newTodoLists);
     setPrompt(false);
     setListToRemove(null);
+
+    storage.saveListsToStorage(newTodoLists);
+    storage.removeItemsInstanceFromStorage(listToRemove.id);
+    storage.removeListPositionInstanceFromStorage(listToRemove.id);
   };
 
   const handleRemovePrompt = e => {
@@ -98,6 +94,7 @@ const App = () => {
     ];
 
     setTodoLists(newTodoLists);
+    storage.saveListsToStorage(newTodoLists);
   };
 
   return (

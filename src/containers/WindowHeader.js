@@ -57,6 +57,7 @@ class WindowHeader extends Component {
 
     this.windowRef = this.props.windowRef;
     this.color = this.props.color;
+    this.setTransform = this.props.setTransform;
   }
 
   handleWindowGrab = e => {
@@ -78,7 +79,14 @@ class WindowHeader extends Component {
     translate(${windowOffsetX}px, ${windowOffsetY}px)`;
   };
 
-  handleWindowRelase = () => {
+  handleWindowRelase = e => {
+    if (e.target.tagName !== 'H2') return false;
+
+    const [cursorX, cursorY] = [e.clientX, e.clientY];
+    const windowOffsetX = cursorX - this.windowInnerOffsetX;
+    const windowOffsetY = cursorY - this.windowInnerOffsetY;
+
+    this.setTransform({ x: windowOffsetX, y: windowOffsetY });
     this.setState({ isWindowGrabbed: false });
   };
 
