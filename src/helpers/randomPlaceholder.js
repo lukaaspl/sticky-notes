@@ -1,10 +1,10 @@
 const randomPlaceholder = todoLists => {
   const placeholders = [
     'check browsers compatibility',
-    'take dog for a walk',
-    'clean room before mom comes',
-    'buy milk and bananas',
-    'book an appointment with dentist'
+    'optimize photos for website',
+    'create cool todo application',
+    'implement some new features',
+    'commit introduced changes'
   ];
 
   const randomIndex = Math.floor(Math.random() * placeholders.length);

@@ -5,6 +5,7 @@ import TodoList from './containers/TodoList';
 import AddListForm from './containers/AddListForm';
 import Prompt from './components/Prompt';
 import WelcomeScreen from './components/WelcomeScreen';
+import Footer from './components/Footer';
 
 import backgroundAnimation from './helpers/backgroundAnimation';
 import randomPlaceholder from './helpers/randomPlaceholder';
@@ -120,6 +121,7 @@ const App = () => {
       />
       {todoLists.length > 0 && todoListsCollection}
       <AddListForm addList={handleAddList} isAnyList={todoLists.length > 0} />
+      <Footer />
     </>
   );
 };

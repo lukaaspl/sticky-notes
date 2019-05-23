@@ -13,13 +13,13 @@ const animation = keyframes`
     transform: scale(1);
   }
 
-  15% {
+  20% {
     opacity: 1;
     filter: grayscale(0);
     transform: scale(1);
   }
 
-  40% {
+  45% {
     opacity: 1;
     filter: grayscale(0);
     transform: scale(1);
@@ -35,7 +35,7 @@ const animation = keyframes`
 `;
 
 const titleAnimation = css`
-  animation: ${animation} 5s ease-in-out both;
+  animation: ${animation} 4s ease both;
 `;
 
 export default titleAnimation;
