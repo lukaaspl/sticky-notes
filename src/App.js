@@ -4,6 +4,8 @@ import { createGlobalStyle } from 'styled-components';
 import TodoList from './containers/TodoList';
 import AddListForm from './containers/AddListForm';
 import Prompt from './components/Prompt';
+import WelcomeScreen from './components/WelcomeScreen';
+
 import backgroundAnimation from './helpers/backgroundAnimation';
 import randomPlaceholder from './helpers/randomPlaceholder';
 import randomActionMessage from './helpers/randomActionMessage';
@@ -34,6 +36,7 @@ const App = () => {
   );
   const [prompt, setPrompt] = useState(false);
   const [listToRemove, setListToRemove] = useState(null);
+  const welcomeScreen = storage.getWelcomeScreen() ? true : false;
 
   const handleSetWindowActive = id => {
     const newTodoLists = [...todoLists];
@@ -108,6 +111,7 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
+      <WelcomeScreen active={welcomeScreen} />
       <Prompt
         isVisible={prompt}
         listToRemove={listToRemove}
@@ -115,7 +119,7 @@ const App = () => {
         removeList={handleRemoveList}
       />
       {todoLists.length > 0 && todoListsCollection}
-      <AddListForm addList={handleAddList} />
+      <AddListForm addList={handleAddList} isAnyList={todoLists.length > 0} />
     </>
   );
 };

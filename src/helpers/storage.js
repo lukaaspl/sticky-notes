@@ -54,6 +54,14 @@ const removeListViewStateInstance = listId => {
     localStorage.removeItem(`viewStateForList${listId}`);
 };
 
+const setWelcomeScreen = () => {
+  sessionStorage.setItem('welcomeScreen', 'true');
+};
+
+const getWelcomeScreen = () => {
+  return sessionStorage.getItem('welcomeScreen');
+};
+
 export default {
   saveLists,
   getLists,
@@ -65,5 +73,7 @@ export default {
   removeListPositionInstance,
   saveListViewState,
   getListViewState,
-  removeListViewStateInstance
+  removeListViewStateInstance,
+  setWelcomeScreen,
+  getWelcomeScreen
 };

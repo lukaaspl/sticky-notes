@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import PulseAnimation from '../helpers/PulseAnimation';
+import pulseAnimation from '../helpers/pulseAnimation';
 import ColorBox from '../components/ColorBox';
 import { FaArrowRight } from 'react-icons/fa';
 
@@ -24,10 +24,11 @@ const AddListButton = styled.div`
   cursor: pointer;
   transition: opacity 0.2s, box-shadow 0.2s;
   box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.3);
+  ${({ isFormToggled, pulse }) => !pulse && !isFormToggled && pulseAnimation};
 
   :hover {
     opacity: ${props => (props.isFormToggled ? '0.7' : '0.6')};
-    ${props => (props.isFormToggled ? 'animation: none' : PulseAnimation)};
+    ${props => (props.isFormToggled ? 'animation: none' : pulseAnimation)};
   }
 
   ::before,
@@ -233,6 +234,7 @@ class AddListForm extends Component {
         <AddListButton
           onClick={this.handleToggleForm}
           isFormToggled={isFormToggled}
+          pulse={this.props.isAnyList}
         />
         <StyledForm onSubmit={this.handleValidateForm}>
           <StyledInput

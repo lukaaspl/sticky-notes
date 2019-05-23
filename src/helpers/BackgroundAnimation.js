@@ -1,6 +1,6 @@
 import { keyframes } from 'styled-components';
 
-const moveBackground = keyframes`
+const backgroundAnimation = keyframes`
   0% {
     background-position: 0% 50%;
   }
@@ -14,4 +14,4 @@ const moveBackground = keyframes`
   }
 `;
 
-export default moveBackground;
+export default backgroundAnimation;

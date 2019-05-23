@@ -14,8 +14,8 @@ const pulse = keyframes`
   }
 `;
 
-const PulseAnimation = () => css`
+const pulseAnimation = css`
   animation: ${pulse} 1s 0.1s infinite;
 `;
 
-export default PulseAnimation;
+export default pulseAnimation;
