@@ -22,7 +22,11 @@ const StyledWrapper = styled.div`
 const Footer = () => (
   <StyledWrapper>
     &copy; 2019 All notes arranged by{' '}
-    <a href="https://github.com/lukaaspl" target="_blank">
+    <a
+      href="https://github.com/lukaaspl"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
       Łukasz Roman
     </a>
   </StyledWrapper>
