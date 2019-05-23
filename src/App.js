@@ -29,16 +29,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const App = () => {
-  //     id: 1,
-  //     name: 'Primary todo list',
-  //     color: 'Lilac Purple',
-  //     placeholder: 'take dog for a walk',
-  //     actionMessage: 'test1',
-  //     isActive: true
   const [todoLists, setTodoLists] = useState(
-    storage.getListsFromStorage() ? storage.getListsFromStorage() : []
+    storage.getLists() ? storage.getLists() : []
   );
-
   const [prompt, setPrompt] = useState(false);
   const [listToRemove, setListToRemove] = useState(null);
 
@@ -67,9 +60,10 @@ const App = () => {
     setPrompt(false);
     setListToRemove(null);
 
-    storage.saveListsToStorage(newTodoLists);
-    storage.removeItemsInstanceFromStorage(listToRemove.id);
-    storage.removeListPositionInstanceFromStorage(listToRemove.id);
+    storage.saveLists(newTodoLists);
+    storage.removeItemsInstance(listToRemove.id);
+    storage.removeListPositionInstance(listToRemove.id);
+    storage.removeListViewStateInstance(listToRemove.id);
   };
 
   const handleRemovePrompt = e => {
@@ -94,8 +88,22 @@ const App = () => {
     ];
 
     setTodoLists(newTodoLists);
-    storage.saveListsToStorage(newTodoLists);
+    storage.saveLists(newTodoLists);
   };
+
+  const todoListsCollection = todoLists.map(todoList => (
+    <TodoList
+      key={todoList.id}
+      id={todoList.id}
+      name={todoList.name}
+      color={todoList.color}
+      placeholder={todoList.placeholder}
+      actionMessage={todoList.actionMessage}
+      isWindowActive={todoList.isActive}
+      active={handleSetWindowActive.bind(this, todoList.id)}
+      confirmRemovingList={handleConfirmRemovingList}
+    />
+  ));
 
   return (
     <>
@@ -106,19 +114,7 @@ const App = () => {
         removePrompt={handleRemovePrompt}
         removeList={handleRemoveList}
       />
-      {todoLists.map(todoList => (
-        <TodoList
-          key={todoList.id}
-          id={todoList.id}
-          name={todoList.name}
-          color={todoList.color}
-          placeholder={todoList.placeholder}
-          actionMessage={todoList.actionMessage}
-          isWindowActive={todoList.isActive}
-          active={handleSetWindowActive.bind(this, todoList.id)}
-          confirmRemovingList={handleConfirmRemovingList}
-        />
-      ))}
+      {todoLists.length > 0 && todoListsCollection}
       <AddListForm addList={handleAddList} />
     </>
   );

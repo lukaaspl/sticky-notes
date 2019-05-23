@@ -12,17 +12,17 @@ const StyledWrapper = styled.div`
   position: absolute;
   width: 350px;
   border-radius: 5px;
-  background-color: ${({ color }) => setColor(color).listBackground};
   box-shadow: 0 6px 7px -2px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  opacity: ${props => (props.isWindowActive ? 1 : 0.7)};
-  z-index: ${props => (props.isWindowActive ? 2 : 1)};
-  cursor: ${props => (props.isWindowActive ? 'default' : 'pointer')};
-  max-height: ${props => (props.isMinimized ? '35px' : '100vh')};
+  background-color: ${({ color }) => setColor(color).listBackground};
+  opacity: ${({ isWindowActive }) => (isWindowActive ? 1 : 0.7)};
+  z-index: ${({ isWindowActive }) => (isWindowActive ? 2 : 1)};
+  cursor: ${({ isWindowActive }) => (isWindowActive ? 'default' : 'pointer')};
+  max-height: ${({ isMinimized }) => (isMinimized ? '35px' : '100vh')};
   transition: opacity 0.2s,
-    max-height ${props => (props.isMinimized ? '0.3s' : '1s')};
+    max-height ${({ isMinimized }) => (isMinimized ? '0.3s' : '1s')};
   ${({ position }) => position};
 `;
 
@@ -79,9 +79,13 @@ const TodoList = ({
   confirmRemovingList
 }) => {
   const [todos, setTodos] = useState(
-    storage.getItemsFromStorage(id) ? storage.getItemsFromStorage(id) : []
+    storage.getItems(id) ? storage.getItems(id) : []
   );
-  const [minimized, setMinimized] = useState(false);
+  const [minimized, setMinimized] = useState(
+    storage.getListViewState(id)
+      ? storage.getListViewState(id) === 'true'
+      : false
+  );
   const [menuToggled, setMenuToggled] = useState(false);
   const [transform, setPosition] = useState(
     storage.getListPosition(id) ? storage.getListPosition(id) : false
@@ -102,7 +106,7 @@ const TodoList = ({
     ];
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
+    storage.saveItems(id, newTodos);
   };
 
   const handleChangeItemState = index => {
@@ -111,7 +115,7 @@ const TodoList = ({
     newTodos[index].isDone = !newTodos[index].isDone;
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
+    storage.saveItems(id, newTodos);
   };
 
   const handleRemoveItem = index => {
@@ -120,17 +124,21 @@ const TodoList = ({
     newTodos.splice(index, 1);
 
     setTodos(newTodos);
-    storage.saveItemsToStorage(id, newTodos);
+    storage.saveItems(id, newTodos);
   };
 
   const handleChangeViewState = () => {
     if (menuToggled) setMenuToggled(!menuToggled);
 
     setMinimized(!minimized);
+    storage.saveListViewState(id, !minimized);
   };
 
   const handleToggleMenu = () => {
-    if (minimized) setMinimized(!minimized);
+    if (minimized) {
+      setMinimized(!minimized);
+      storage.saveListViewState(id, !minimized);
+    }
 
     setMenuToggled(!menuToggled);
   };
@@ -138,7 +146,7 @@ const TodoList = ({
   const handleSetTransform = ({ x, y }) => {
     setPosition({ x, y });
 
-    if (x && y) storage.saveListPosition(id, { x, y });
+    x && y && storage.saveListPosition(id, { x, y });
   };
 
   const getWindowPosition = () => {

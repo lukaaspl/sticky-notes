@@ -1,20 +1,20 @@
-const saveListsToStorage = lists => {
+const saveLists = lists => {
   localStorage.setItem('lists', JSON.stringify(lists));
 };
 
-const getListsFromStorage = () => {
+const getLists = () => {
   return JSON.parse(localStorage.getItem('lists'));
 };
 
-const removeItemsInstanceFromStorage = listId => {
+const removeItemsInstance = listId => {
   localStorage.removeItem(`itemsForList${listId}`);
 };
 
-const saveItemsToStorage = (listId, items) => {
+const saveItems = (listId, items) => {
   localStorage.setItem(`itemsForList${listId}`, JSON.stringify(items));
 };
 
-const getItemsFromStorage = listId => {
+const getItems = listId => {
   for (let key in localStorage)
     if (key === `itemsForList${listId}`) return JSON.parse(localStorage[key]);
 
@@ -33,18 +33,37 @@ const getListPosition = listId => {
   return false;
 };
 
-const removeListPositionInstanceFromStorage = listId => {
+const removeListPositionInstance = listId => {
   if (localStorage.hasOwnProperty(`positionForList${listId}`))
     localStorage.removeItem(`positionForList${listId}`);
 };
 
+const saveListViewState = (listId, viewState) => {
+  localStorage.setItem(`viewStateForList${listId}`, viewState);
+};
+
+const getListViewState = listId => {
+  for (let key in localStorage)
+    if (key === `viewStateForList${listId}`) return localStorage[key];
+
+  return false;
+};
+
+const removeListViewStateInstance = listId => {
+  if (localStorage.hasOwnProperty(`viewStateForList${listId}`))
+    localStorage.removeItem(`viewStateForList${listId}`);
+};
+
 export default {
-  saveListsToStorage,
-  getListsFromStorage,
-  removeItemsInstanceFromStorage,
-  saveItemsToStorage,
-  getItemsFromStorage,
+  saveLists,
+  getLists,
+  removeItemsInstance,
+  saveItems,
+  getItems,
   saveListPosition,
   getListPosition,
-  removeListPositionInstanceFromStorage
+  removeListPositionInstance,
+  saveListViewState,
+  getListViewState,
+  removeListViewStateInstance
 };
